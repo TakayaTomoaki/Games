@@ -9,7 +9,7 @@ if (empty($_GET)) {
   unset($_SESSION['white']);
 
   $player = 1;
-  $mark = "◯";
+  $mark = "<i class='fa-regular fa-circle' style='color:black'></i>";
   $_SESSION['player'] = $player;
 }
 
@@ -25,27 +25,23 @@ if (!empty($_GET)) {
 
 //playerの管理
 if (!empty($P)) {
-  $player = $_SESSION['player'] + 1;
-  if ($player % 2 === 1) {
-    $player = 1;
+  $player = $_SESSION['player'];
+
+  if ($player === (int) $P) {
+    $player = $player % 2 + 1;
+    $_SESSION['player'] = $player;
   }
 
   if ($player !== (int) $P) {
     $_SESSION['player'] = $player;
   }
 
-  if ($player === (int) $P) {
-    $player = $player % 2 + 1;
-
-    $_SESSION['player'] = $player;
-  }
-
   if ($player === 1) {
-    $mark = "◯";
+    $mark = "<i class='fa-regular fa-circle' style='color:black'></i>";
   }
 
   if ($player === 2) {
-    $mark = "●";
+    $mark = "<i class='fa-solid fa-circle' style='color:black'></i>";
   }
 }
 
@@ -197,11 +193,11 @@ if (!empty($getData) && $pageFlag === 1) {
 //結果画面の表示処理
 if ($pageFlag === 2) {
   if ($P === "1") {
-    $pMark = "◯";
+    $pMark = "<i class='fa-regular fa-circle' style='color:black'></i>";
   }
 
   if ($P === "2") {
-    $pMark = "●";
+    $pMark = "<i class='fa-solid fa-circle' style='color:black'></i>";
   }
 }
 
@@ -214,6 +210,8 @@ if ($pageFlag === 2) {
 <head>
   <meta charset="utf-8">
   <title>五目並べ</title>
+  <link rel ="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+
 </head>
 
 <style>
@@ -260,11 +258,11 @@ if ($pageFlag === 2) {
         if ($y !== 0) {
           //棋譜配列のvalue有無により表示切替
           if (!empty($whiteRecord[$y][$x])) {
-            echo "<td>"."<p style='margin:0;'>"."◯"."</p>"."</td>";
+            echo "<td><i class='fa-regular fa-circle' style='color:black'></i></td>";
           } elseif (!empty($blackRecord[$y][$x])) {
-            echo "<td>"."<p style='margin:0;'>"."●"."</p>"."</td>";
+            echo "<td><i class='fa-solid fa-circle' style='color:black'></i></td>";
           } else {
-            echo "<td>"."<a href='?$y-$x-$player'>"."・"."</a>"."</td>";
+            echo "<td><a href='?$y-$x-$player'>・</a></td>";
           }
         }
       }
@@ -295,11 +293,11 @@ if ($pageFlag === 2) {
         if ($y !== 0) {
           //棋譜配列のvalue有無により表示切替
           if (!empty($whiteRecord[$y][$x])) {
-            echo "<td>"."<p style='margin:0;'>"."◯"."</p>"."</td>";
+            echo "<td><i class='fa-regular fa-circle' style='color:black'></i></td>";
           } elseif (!empty($blackRecord[$y][$x])) {
-            echo "<td>"."<p style='margin:0;'>"."●"."</p>"."</td>";
+            echo "<td><i class='fa-solid fa-circle' style='color:black'></i></td>";
           } else {
-            echo "<td>"." "."</td>";
+            echo "<td> </td>";
           }
         }
       }
