@@ -8,9 +8,8 @@ if (empty($_GET)) {
   unset($_SESSION['black']);
   unset($_SESSION['white']);
 
-  $player = 1;
   $mark = "<i class='fa-regular fa-circle' style='color:black'></i>";
-  $_SESSION['player'] = $player;
+  $_SESSION['player'] = 1;
 }
 
 //画面遷移を管理（$pageFlag 1:play画面  2:結果画面）
@@ -24,17 +23,15 @@ if (!empty($_GET)) {
 }
 
 //playerの管理
+$player = $_SESSION['player'];
+
 if (!empty($P)) {
-  $player = $_SESSION['player'];
 
   if ($player === (int) $P) {
     $player = $player % 2 + 1;
-    $_SESSION['player'] = $player;
   }
 
-  if ($player !== (int) $P) {
-    $_SESSION['player'] = $player;
-  }
+  $_SESSION['player'] = $player;
 
   if ($player === 1) {
     $mark = "<i class='fa-regular fa-circle' style='color:black'></i>";
@@ -46,8 +43,8 @@ if (!empty($P)) {
 }
 
 //白と黒の棋譜管理
-$white = [];  //1P
-$black = [];  //2P
+$whiteRecord = [];  //1P
+$blackRecord = [];  //2P
 
 //白・黒の棋譜取得
 if (!empty($_SESSION['black'])) {
@@ -61,15 +58,19 @@ if (!empty($_SESSION['white'])) {
 //指し手の保存
 if (!empty($getData)) {
   if ($player === 1) {
-    $blackRecord[$Y][$X] = 1;
-    $_SESSION['black'] = $blackRecord;
-    $record = $blackRecord;
+    if(empty($whiteRecord[$Y][$X])){
+      $blackRecord[$Y][$X] = 1;
+      $_SESSION['black'] = $blackRecord;
+      $record = $blackRecord;
+    }
   }
 
   if ($player === 2) {
-    $whiteRecord[$Y][$X] = 1;
-    $_SESSION['white'] = $whiteRecord;
-    $record = $whiteRecord;
+    if(empty($blackRecord[$Y][$X])) {
+      $whiteRecord[$Y][$X] = 1;
+      $_SESSION['white'] = $whiteRecord;
+      $record = $whiteRecord;
+    }
   }
 }
 
@@ -201,6 +202,12 @@ if ($pageFlag === 2) {
   }
 }
 
+$error = error_get_last();
+if(!empty($error)){
+  $pageFlag = 2;
+  $errorMessage = "エラーが発生しました。初めからやり直して下さい。";
+}
+
 ?>
 
 
@@ -279,7 +286,12 @@ if ($pageFlag === 2) {
 
 <!--結果画面（$pageFlag=2）-->
 <?php if ($pageFlag === 2) : ?>
-  <?php echo $P."Ｐ【 ".$pMark." 】の 勝利 です！"; ?>
+  <?php if(empty($error)) {
+    echo $P."Ｐ【 ".$pMark." 】の 勝利 です！";
+  } else {
+    echo $errorMessage;
+  }
+  ?>
   <table>
     <?php
     for ($y = 0; $y < 16; $y++) {
