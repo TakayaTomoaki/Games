@@ -1,9 +1,10 @@
 <?php declare(strict_types=1);
 
 session_start();
+header('X-Frame-Options: deny');
 
 //SESSION初期化・初期設定
-if (empty($_GET)) {
+if (empty($_POST)) {
   unset($_SESSION['player']);
   unset($_SESSION['black']);
   unset($_SESSION['white']);
@@ -16,8 +17,8 @@ if (empty($_GET)) {
 $pageFlag = 1;
 
 //プレイデータ取得
-if (!empty($_GET)) {
-  $getData = array_key_first($_GET);
+if (!empty($_POST)) {
+  $getData = $_POST['record'];
   //$Y=縦, $X=横, $P=player
   [$Y, $X, $P] = explode('-', $getData);
 }
@@ -246,6 +247,12 @@ if(!empty($error)){
     text-decoration: none;
     color: white;
   }
+
+  .button {
+    color: white;
+    background: transparent;
+    border: none;
+  }
 </style>
 
 <body>
@@ -269,7 +276,7 @@ if(!empty($error)){
           } elseif (!empty($blackRecord[$y][$x])) {
             echo "<td><i class='fa-solid fa-circle' style='color:black'></i></td>";
           } else {
-            echo "<td><a href='?$y-$x-$player'>・</a></td>";
+            echo "<td><form action='' method='post'><button class='button' name='record' type='submit' value='$y-$x-$player'>・</button></form></td>";
           }
         }
       }
