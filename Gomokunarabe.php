@@ -248,7 +248,7 @@ if(!empty($error)){
     color: white;
   }
 
-  .button {
+  .btn {
     color: white;
     background: transparent;
     border: none;
@@ -276,7 +276,7 @@ if(!empty($error)){
           } elseif (!empty($blackRecord[$y][$x])) {
             echo "<td><i class='fa-solid fa-circle' style='color:black'></i></td>";
           } else {
-            echo "<td><form action='' method='post'><button class='button' name='record' type='submit' value='$y-$x-$player'>・</button></form></td>";
+            echo "<td><form action='' method='post'><button class='btn' name='record' type='submit' value='$y-$x-$player'>・</button></form></td>";
           }
         }
       }
